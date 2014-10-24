@@ -1,13 +1,15 @@
 package com.sudoko;
 
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+    	Game game = new Game();
+    	try {
+			game.play();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 }
