@@ -1,51 +1,74 @@
 package com.sudoko;
-import java.util.Set;
 
+import java.util.Set;
 import com.sudoko.components.Board;
 import com.sudoko.components.Line;
 import com.sudoko.components.Point;
-import com.sudoko.components.Section;
+import com.sudoko.components.SubGrid;
 
+/**
+ * Class represents a Sudoko game, whereby each row, column, and 3x3 sub-grids
+ * contains unique digits from 1 to 9.
+ * 
+ */
 public class Game {
-	public final Board board = new Board();
-
+	private final Board fBoard;
+	
+	public Game() {
+		fBoard = new Board();
+	}
+	
 	public void play() throws Exception {
+		fBoard.initialize();
+		
+		System.out.println("**** Initial board is: ****");
+		fBoard.print();
 
-		board.initialize();
-		board.print();
-
-		Point p = board.findNextPoint();
-		backTrack(p);
+		takeATurn();
+		
+		System.out.println("**** Here is a possible solution: ****");
+		fBoard.print();
 	}
 
-	public void backTrack(Point currentPt) {
+	/**
+	 * Method encapsulates a move in Sudoko game.
+	 */
+	public void takeATurn() {
 		// check if we have a solution
-		if (board.fEmptyPts.size() == 0) {
-			board.bIsAllFinished = true;
+		if (fBoard.fEmptyPts.size() == 0) {
+			fBoard.bIsAllFinished = true;
 		} else {
-			Set<Integer> candidates = generateCandidates(currentPt);
-
+			// Pick an open space
+			Point currentPt = fBoard.findNextPoint();
+			
+			// Return a list of possible integer values
+			Set<Integer> candidates = generatePossibleValues(currentPt);
+			
 			for (Integer c : candidates) {
-				// get point, and assign it a value of c
 				currentPt.fValue = c;
+					
+				takeATurn();
 
-				Point next = board.findNextPoint();
-				backTrack(next);
-
-				currentPt.fValue = 0;
-
-				if (board.bIsAllFinished)
+				if (fBoard.bIsAllFinished)
 					return;
+				else
+					currentPt.fValue = 0;
 			}
 		}
 	}
 
-	public Set<Integer> generateCandidates(Point pt) {
-		Set<Integer> candidates = board.generateCompleteSet();
+	/**
+	 * Method generate all possible values for a given Point.
+	 * 
+	 * @param pt
+	 * @return a set of integer values
+	 */
+	public Set<Integer> generatePossibleValues(Point pt) {
+		Set<Integer> candidates = fBoard.generateCompleteSet();
 
-		Line lRow = board.fAllRows.get(pt.fRow);
-		Line lCol = board.fAllColumns.get(pt.fColumn);
-		Section s = board.fAllSections[pt.fRow / 3][pt.fColumn / 3];
+		Line lRow = fBoard.fAllRows.get(pt.fRow);
+		Line lCol = fBoard.fAllColumns.get(pt.fColumn);
+		SubGrid s = fBoard.fAllSections[pt.fRow/3][pt.fColumn/3];
 
 		candidates.removeAll(lRow.fMembers);
 		candidates.removeAll(lCol.fMembers);
@@ -53,5 +76,4 @@ public class Game {
 
 		return candidates;
 	}
-
 }

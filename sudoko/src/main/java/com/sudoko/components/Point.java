@@ -1,5 +1,9 @@
 package com.sudoko.components;
 
+/**
+ * Class represents a singular box on a Sudoko board.
+ *
+ */
 public class Point {
 	public final int fRow;
 	public final int fColumn;
@@ -9,5 +13,9 @@ public class Point {
 		fRow = row;
 		fColumn = column;
 		fValue = value;
+	}
+	
+	public String toString() {
+		return String.format("Pt[%d][%d]=%d", fRow, fColumn, fValue);
 	}
 }
