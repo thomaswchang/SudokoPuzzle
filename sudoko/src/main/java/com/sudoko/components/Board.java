@@ -18,14 +18,14 @@ import java.util.Stack;
 public class Board {
 	public final int SIZE = 9;
 	
-	public final Point[][] fUnits = new Point[SIZE][SIZE];
-	public final List<Line> fAllRows = new ArrayList<Line>();
-	public final List<Line> fAllColumns = new ArrayList<Line>();
-	public final SubGrid[][] fAllSections = new SubGrid[3][3];
+	private final Point[][] fPoints = new Point[SIZE][SIZE];
+	private final List<Line> fAllRows = new ArrayList<Line>();
+	private final List<Line> fAllColumns = new ArrayList<Line>();
+	private final SubGrid[][] fAllSubGrids = new SubGrid[3][3];
 
-	public boolean bIsAllFinished;
-	public Stack<Point> fEmptyPts = new Stack<Point>();
-	
+	private boolean bIsAllFinished;
+	private Stack<Point> fEmptyPts = new Stack<Point>();
+		
 	public Board() {
 		bIsAllFinished = false;		
 		for (int i=0; i<SIZE; i++) {
@@ -35,7 +35,7 @@ public class Board {
 		
 		for (int i=0; i<3; i++) {
 			for (int j=0; j<3; j++) {
-				fAllSections[i][j] = new SubGrid(new HashSet<Point>());
+				fAllSubGrids[i][j] = new SubGrid(new HashSet<Point>());
 			}
 		}
 	}
@@ -65,9 +65,9 @@ public class Board {
 				Line verticalLine =this.fAllColumns.get(col);
 				verticalLine.add(p);
 
-				this.fAllSections[row/3][col/3].add(p);
+				this.fAllSubGrids[row/3][col/3].add(p);
 				
-				this.fUnits[row][col] = p;
+				this.fPoints[row][col] = p;
 
 				col++;
 			}
@@ -79,6 +79,8 @@ public class Board {
 	 * Method returns a point that has an empty value.
 	 */
 	public Point findNextPoint() {
+		if (fEmptyPts.size() == 0)
+			return null;
 		return fEmptyPts.pop();
 	}
 
@@ -86,11 +88,11 @@ public class Board {
 	 * Method prints the values of each point on the sudoko board.
 	 */
 	public void print() {
-		for (int r = 0; r < fUnits.length; r++) {
+		for (int r = 0; r < fPoints.length; r++) {
 			StringBuffer buffer = new StringBuffer();
-			for (int c = 0; c < fUnits[r].length; c++) {
-				buffer.append(fUnits[r][c].fValue);
-				if (c < fUnits[r].length -1)
+			for (int c = 0; c < fPoints[r].length; c++) {
+				buffer.append(fPoints[r][c].fValue);
+				if (c < fPoints[r].length -1)
 					buffer.append(", ");
 			}
 			System.out.println(buffer.toString());
@@ -119,7 +121,7 @@ public class Board {
 		
 		Line vertLine = this.fAllColumns.get(pt.fColumn);
 		
-		SubGrid subGrid = this.fAllSections[pt.fRow/3][pt.fColumn/3];
+		SubGrid subGrid = this.fAllSubGrids[pt.fRow/3][pt.fColumn/3];
 		
 		candidates.removeAll(horLine.getValueOfFillledPoints());
 		candidates.removeAll(vertLine.getValueOfFillledPoints());
@@ -128,4 +130,52 @@ public class Board {
 		return candidates;
 	}
 
+	/**
+	 * Method returns all the points on the board
+	 */
+	public Point[][] getAllPts() {
+		return fPoints;
+	}
+	
+	/**
+	 * Method returns all horizontal lines on the board
+	 */
+	public List<Line> getAllHorizontalLines() {
+		return fAllRows;
+	}
+	
+	/**
+	 * Method returns all vertical lines on the board
+	 */
+	public List<Line> getAllVerticalLines() {
+		return fAllColumns;
+	}
+	
+	/**
+	 * Method returns all sub-sections on the board
+	 */
+	public SubGrid[][] getAllSubSections() {
+		return fAllSubGrids;
+	}
+	
+	/**
+	 * Method returns whether the board is filled.
+	*/
+	public boolean isBoardFilled() {
+		return bIsAllFinished;
+	}
+
+	/**
+	 * Method sets whether the board is filled.
+	 */
+	public void setBoardIsFilled(boolean state) {
+		 bIsAllFinished = state;
+	}
+	
+	/**
+	 * Method returns a collection of non-filled points
+	 */
+	public Stack<Point> getEmptyPoints() {
+		return fEmptyPts;
+	}
 }

@@ -19,7 +19,7 @@ public class Game {
 	public void play() throws Exception {
 		fBoard.initialize();
 		
-		System.out.println("**** Initial board is: ****");
+		System.out.println("**** Initial board configuration is: ****");
 		fBoard.print();
 
 		takeATurn();
@@ -33,8 +33,8 @@ public class Game {
 	 */
 	public void takeATurn() {
 		// check if we have a solution
-		if (fBoard.fEmptyPts.size() == 0) {
-			fBoard.bIsAllFinished = true;
+		if (fBoard.getEmptyPoints().size() == 0) {
+			fBoard.setBoardIsFilled(true);
 		} else {
 			// Pick an open space
 			Point currentPt = fBoard.findNextPoint();
@@ -47,12 +47,11 @@ public class Game {
 					
 				takeATurn();
 
-				if (fBoard.bIsAllFinished)
+				if (fBoard.isBoardFilled())
 					return;
 				else
 					currentPt.fValue = 0;
 			}
 		}
 	}
-
 }
