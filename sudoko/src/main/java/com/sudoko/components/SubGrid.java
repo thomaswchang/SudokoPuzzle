@@ -5,22 +5,10 @@ import java.util.Set;
 /**
  * Class represents a 3x3 grid on a Sudoko board.
  */
-public class SubGrid {
-	public Set<Point> fMembers;
-
+public class SubGrid extends Element {
+	
 	public SubGrid(Set<Point> members) {
-		fMembers = members;
+		super(members);
 	}
 
-	public void addMember(Point p) {
-		fMembers.add(p);
-	}
-
-	public int getNumEmpty() {
-		int cnt=0;
-		for (Point p : fMembers)
-			if (p.fValue ==0)
-				cnt ++;
-		return cnt;
-	}
 }

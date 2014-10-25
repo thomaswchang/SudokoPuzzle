@@ -2,9 +2,7 @@ package com.sudoko;
 
 import java.util.Set;
 import com.sudoko.components.Board;
-import com.sudoko.components.Line;
 import com.sudoko.components.Point;
-import com.sudoko.components.SubGrid;
 
 /**
  * Class represents a Sudoko game, whereby each row, column, and 3x3 sub-grids
@@ -26,12 +24,12 @@ public class Game {
 
 		takeATurn();
 		
-		System.out.println("**** Here is a possible solution: ****");
+		System.out.println("**** A possible solution is: ****");
 		fBoard.print();
 	}
 
 	/**
-	 * Method encapsulates a move in Sudoko game.
+	 * Method represents a move in Sudoko game.
 	 */
 	public void takeATurn() {
 		// check if we have a solution
@@ -42,7 +40,7 @@ public class Game {
 			Point currentPt = fBoard.findNextPoint();
 			
 			// Return a list of possible integer values
-			Set<Integer> candidates = generatePossibleValues(currentPt);
+			Set<Integer> candidates = fBoard.generatePossibleValues(currentPt);
 			
 			for (Integer c : candidates) {
 				currentPt.fValue = c;
@@ -57,23 +55,4 @@ public class Game {
 		}
 	}
 
-	/**
-	 * Method generate all possible values for a given Point.
-	 * 
-	 * @param pt
-	 * @return a set of integer values
-	 */
-	public Set<Integer> generatePossibleValues(Point pt) {
-		Set<Integer> candidates = fBoard.generateCompleteSet();
-
-		Line lRow = fBoard.fAllRows.get(pt.fRow);
-		Line lCol = fBoard.fAllColumns.get(pt.fColumn);
-		SubGrid s = fBoard.fAllSections[pt.fRow/3][pt.fColumn/3];
-
-		candidates.removeAll(lRow.fMembers);
-		candidates.removeAll(lCol.fMembers);
-		candidates.removeAll(s.fMembers);
-
-		return candidates;
-	}
 }

@@ -65,7 +65,7 @@ public class Board {
 				Line verticalLine =this.fAllColumns.get(col);
 				verticalLine.add(p);
 
-				this.fAllSections[row/3][col/3].addMember(p);
+				this.fAllSections[row/3][col/3].add(p);
 				
 				this.fUnits[row][col] = p;
 
@@ -106,6 +106,26 @@ public class Board {
 		return s;
 	}
 	
+	/**
+	 * Method generate all possible values for a given Point.
+	 * 
+	 * @param pt
+	 * @return a set of integer values
+	 */
+	public Set<Integer> generatePossibleValues(Point pt) {
+		Set<Integer> candidates = this.generateCompleteSet();
 
+		Line horLine = this.fAllRows.get(pt.fRow);
+		
+		Line vertLine = this.fAllColumns.get(pt.fColumn);
+		
+		SubGrid subGrid = this.fAllSections[pt.fRow/3][pt.fColumn/3];
+		
+		candidates.removeAll(horLine.getValueOfFillledPoints());
+		candidates.removeAll(vertLine.getValueOfFillledPoints());
+		candidates.removeAll(subGrid.getValueOfFillledPoints());
+		
+		return candidates;
+	}
 
 }
