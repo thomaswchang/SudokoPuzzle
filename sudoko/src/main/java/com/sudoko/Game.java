@@ -7,25 +7,33 @@ import com.sudoko.components.Point;
 /**
  * Class represents a Sudoko game, whereby each row, column, and 3x3 sub-grids
  * contains unique digits from 1 to 9.
- * 
  */
 public class Game {
 	private final Board fBoard;
+	private final String fFilePath;
 	
 	public Game() {
 		fBoard = new Board();
+		fFilePath = "/src/main/java/com/sudoko/resource/input.csv";
 	}
 	
-	public void play() throws Exception {
-		fBoard.initialize();
+	public void startGame() throws Exception {
+		try {
+			fBoard.initFromCsv(fFilePath);
+		} catch (Exception e) {
+			String msg = String.format(
+					"Sudoko board failed to initialize due to:\n %s ",
+					e.getMessage());
+			throw new Exception(msg);
+		}
 		
-		System.out.println("**** Initial board configuration is: ****");
-		fBoard.print();
+		System.out.println("Initial board configuration is:");
+		fBoard.showAllValues();
 
 		takeATurn();
 		
-		System.out.println("**** A possible solution is: ****");
-		fBoard.print();
+		System.out.println("A possible solution is:");
+		fBoard.showAllValues();
 	}
 
 	/**
@@ -33,24 +41,26 @@ public class Game {
 	 */
 	public void takeATurn() {
 		// check if we have a solution
-		if (fBoard.getEmptyPoints().size() == 0) {
+		if (fBoard.getAllBlankPts().size() == 0) {
 			fBoard.setBoardIsFilled(true);
 		} else {
-			// Pick an open space
-			Point currentPt = fBoard.findNextPoint();
+			Point currentPt = fBoard.findNextOpenSpace();
 			
-			// Return a list of possible integer values
 			Set<Integer> candidates = fBoard.generatePossibleValues(currentPt);
 			
+			// If there are no candidates, look at this point later
+			if (candidates.size() == 0)
+				fBoard.getAllBlankPts().add(currentPt);
+			
 			for (Integer c : candidates) {
-				currentPt.fValue = c;
+				currentPt.setValue(c);
 					
 				takeATurn();
 
 				if (fBoard.isBoardFilled())
 					return;
 				else
-					currentPt.fValue = 0;
+					currentPt.setValue(0);
 			}
 		}
 	}

@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-
 /**
  * Unit class for the Board class.
  */
@@ -15,7 +14,7 @@ public class BoardIT {
 	@Test
 	public void testInitializeMethod() throws Exception {
 		Board board = new Board();
-		board.initialize();
+		board.initFromCsv();
 		
 		// Assert there are 81 Points
 		int numPoints = board.getAllPts().length * board.getAllPts()[0].length;
@@ -36,16 +35,16 @@ public class BoardIT {
 	public void testFindNextPointMethodReturnsNullWhenBoardIsAllFilled() {
 		Board board = new Board();
 		
-		Point p = board.findNextPoint();
+		Point p = board.findNextOpenSpace();
 		assertEquals("An filled board returns a null pointer", null, p);
 	}
 
 	@Test
 	public void testMethodFindNextPointReturnsAPointWhenBoardIsNotAllFilled() throws Exception {
 		Board board = new Board();
-		board.initialize();
+		board.initFromCsv();
 		
-		Point p = board.findNextPoint();
+		Point p = board.findNextOpenSpace();
 
 		assertEquals("An non-filled board returns a point object",
 				"class com.sudoko.components.Point", p.getClass().toString());

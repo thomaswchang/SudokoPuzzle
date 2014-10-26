@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-
 /**
  * Unit test for the Element class, which is the parent of the Line and SubGrid
  * classes.
@@ -26,7 +25,7 @@ public class ElementIT {
 	public void getNumEmpty() {
 		int pointValue = 0;
 		Element e = createElementWithOneValue(1,1, pointValue);
-		assertEquals("Expect 1 elements with empty value", 1, e.getNumEmpty());
+		assertEquals("Expect 1 elements with empty value", 1, e.getNumberOfBlanks());
 	}
 	
 	private Element createElementWithOneValue(int row, int column, int value) {

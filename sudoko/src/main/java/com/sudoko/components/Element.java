@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Base class for Sudoko components
- *
+ * Base class for Sudoko components.
  */
 public class Element {
 	public Set<Point> fMembers;
@@ -22,17 +21,17 @@ public class Element {
 	public List<Integer> getValueOfFillledPoints() {
 		List<Integer> values = new ArrayList<Integer>();
 		for (Point p : fMembers) {
-			int val = p.fValue;
+			int val = p.getValue();
 			if (val != 0)
 				values.add(val);
 		}
 		return values;		
 	}
 	
-	public int getNumEmpty() {
+	public int getNumberOfBlanks() {
 		int cnt=0;
 		for (Point p : fMembers)
-			if (p.fValue ==0)
+			if (p.getValue() == 0)
 				cnt ++;
 		return cnt;
 	}

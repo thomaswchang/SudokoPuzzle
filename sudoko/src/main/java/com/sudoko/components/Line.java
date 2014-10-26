@@ -4,7 +4,6 @@ import java.util.HashSet;
 
 /**
  * Class represents a row or column on a Sudoko board.
- *
  */
 public class Line extends Element{
 	

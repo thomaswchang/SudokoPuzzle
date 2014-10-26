@@ -9,9 +9,9 @@ public class App
     {
     	Game game = new Game();
     	try {
-			game.play();
+			game.startGame();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("The sudo application failed with this stack trace:" + e.getMessage());
 		}
     }
 }
